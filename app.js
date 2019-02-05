@@ -36,8 +36,8 @@ var smtpTransport = nodemailer.createTransport({
     secureConnection: false,
     port: 587,
     auth: {
-        user: "hr.mechanicjobs@gmail.com",
-        pass: "hr123456"
+        user: "",
+        pass: ""
     },
     tls:{
         rejectUnauthorized:false
@@ -45,7 +45,27 @@ var smtpTransport = nodemailer.createTransport({
 });
 /*------------------SMTP Over-----------------------------*/
 
-/*------------------Routing Started ------------------------*/
+
+app.get('/getByNum',(req,res)=>{
+    //get the phoneNum of User
+    let phoneNum = req.body.phoneNum
+    admin.auth().getUserByPhoneNumber(phoneNum)
+  .then(function(userRecord) {
+    // See the UserRecord reference doc for the contents of userRecord.
+    console.log("Successfully fetched user data:", userRecord.toJSON());
+    let num = userRecord.toJSON().phoneNumber;
+    var json = JSON.stringify({phoneNum:num});
+   res.end(json);
+
+  })
+  .catch(function(error) {
+    res.end("Failure");
+    console.log("Error fetching user data:", error);
+    
+  });
+
+})
+
 
 app.post('/delete', function(req, res){
     let uid = req.body.id
@@ -66,14 +86,13 @@ app.post('/delete', function(req, res){
 
 app.post('/send', function (req, res) {
     const output = `
-    <p>You have a new contact request</p>
-    <h3>Contact Details</h3>
-    <ul>  
-      <li>Name: ${req.body.name}</li>
-      <li>Company: ${req.body.company}</li>
+    <h3 style="color:blue, text-align:center" >Near By Mechanic</h3>
+    <p>Conform Your Email</p>
+    <p>${req.body.start} ${req.body.name}</p>
       
-    </ul>
-    <h3>Message</h3>
+    
+
+    <p>${req.body.code}</p>
     <p>${req.body.message}</p>`;
     var smtpTransport = nodemailer.createTransport({
         service: "gmail",
@@ -86,7 +105,7 @@ app.post('/send', function (req, res) {
     });
     
     let mailOptions = {
-        from: '', // sender address
+        from: '"Job Alert" hr.mechanicjobs@gmail.com', // sender address
         to: req.body.to, // list of receivers
         subject: 'Mechanic Job', // Subject line
         text: req.body.text, // plain text body
