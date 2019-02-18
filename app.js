@@ -2,7 +2,7 @@ const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 var nodemailer = require("nodemailer");
-const cors =require('cors');
+const cors = require('cors');
 var admin = require('firebase-admin');
 const app = express();
 const port = 3500;
@@ -10,8 +10,8 @@ const port = 3500;
 var serviceAccount = require('./serviceAccountKey.json');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://mechanic-6d028.firebaseio.com'
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://mechanic-6d028.firebaseio.com'
 });
 
 app.use(logger('dev'));
@@ -30,69 +30,72 @@ app.get('/', (req, res) => {
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
 */
-var smtpTransport = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    secureConnection: false,
-    port: 587,
-    auth: {
-        user: "",
-        pass: ""
-    },
-    tls:{
-        rejectUnauthorized:false
-      }
-});
+
 /*------------------SMTP Over-----------------------------*/
 
 
-app.get('/getByNum',(req,res)=>{
+app.get('/getByNum', (req, res) => {
     //get the phoneNum of User
     let phoneNum = req.body.phoneNum
     admin.auth().getUserByPhoneNumber(phoneNum)
-  .then(function(userRecord) {
-    // See the UserRecord reference doc for the contents of userRecord.
-    console.log("Successfully fetched user data:", userRecord.toJSON());
-    let num = userRecord.toJSON().phoneNumber;
-    var json = JSON.stringify({phoneNum:num});
-   res.end(json);
+        .then(function (userRecord) {
+            // See the UserRecord reference doc for the contents of userRecord.
+            console.log("Successfully fetched user data:", userRecord.toJSON());
+            res.status(200).send({
+                msg: 'Already Exist',
+                status: 200
+            });
 
-  })
-  .catch(function(error) {
-    res.end("Failure");
-    console.log("Error fetching user data:", error);
-    
-  });
+        })
+        .catch(function(error) {
+                res.status(200).send({msg: 'Not found',
+                    status: 304});
+                console.log("Error fetching user data:", error);
+                
+              });
 
 })
 
 
-app.post('/delete', function(req, res){
-    let uid = req.body.id
+app.post('/disable', function (req, res) {
+    let uid = (req.body.id)
+    console.log(uid)
+    console.log(typeof(uid))
     admin.auth().updateUser(uid, {
-        
         disabled: true
-      })
-        .then(function(userRecord) {
-          // See the UserRecord reference doc for the contents of userRecord.
-          console.log("Successfully updated user", userRecord.toJSON());
+    })
+        .then(function (userRecord) {
+            // See the UserRecord reference doc for the contents of userRecord.
+            console.log("Successfully updated user", userRecord.toJSON());
 
-          res.end("Chal bhai ho gya ");
+            res.end("Chal bhai ho gya ");
         })
-        .catch(function(error) {
-          console.log("Error updating user:", error);
+        .catch(function (error) {
+            console.log("Error updating user:", error);
+        });
+})
+app.post('/enable', function (req, res) {
+    let uid = req.body.id
+    console.log(uid)
+    admin.auth().updateUser(uid, {
+
+        disabled: false
+    })
+        .then(function (userRecord) {
+            // See the UserRecord reference doc for the contents of userRecord.
+            console.log("Successfully updated user", userRecord.toJSON());
+
+            res.end("Chal bhai ho gya ");
+        })
+        .catch(function (error) {
+            console.log("Error updating user:", error);
         });
 })
 
 app.post('/send', function (req, res) {
     const output = `
-    <h3 style="color:blue, text-align:center" >Near By Mechanic</h3>
-    <p>Conform Your Email</p>
-    <p>${req.body.start} ${req.body.name}</p>
-      
-    
-
-    <p>${req.body.code}</p>
+    <h3 style="color:blue; text-align:center" >Near By Mechanic</h3>
+    <p>${req.body.title} ${req.body.firstname} ${req.body.lastname}</p>
     <p>${req.body.message}</p>`;
     var smtpTransport = nodemailer.createTransport({
         service: "gmail",
@@ -103,12 +106,11 @@ app.post('/send', function (req, res) {
             pass: ""
         }
     });
-    
+
     let mailOptions = {
         from: '"Job Alert" hr.mechanicjobs@gmail.com', // sender address
         to: req.body.to, // list of receivers
-        subject: 'Mechanic Job', // Subject line
-        text: req.body.text, // plain text body
+        subject: `${req.body.subject}`, // Subject line
         html: output // html body
     };
     smtpTransport.sendMail(mailOptions, function (error, response) {
