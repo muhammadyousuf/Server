@@ -18,6 +18,7 @@ app.use(logger('dev'));
 
 app.use(cors());
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -34,23 +35,29 @@ app.get('/', (req, res) => {
 /*------------------SMTP Over-----------------------------*/
 
 
-app.get('/getByNum', (req, res) => {
+app.post('/getByNum', (req, res) => {
+ 
+   
     //get the phoneNum of User
-    let phoneNum = req.body.phoneNum
+    let phoneNum = req.body.phoneNum;
+    console.log(phoneNum)
     admin.auth().getUserByPhoneNumber(phoneNum)
         .then(function (userRecord) {
             // See the UserRecord reference doc for the contents of userRecord.
             console.log("Successfully fetched user data:", userRecord.toJSON());
-            res.status(200).send({
+           return res.status(200).json({
                 msg: 'Already Exist',
                 status: 200
             });
+            
+        
 
         })
         .catch(function(error) {
-                res.status(200).send({msg: 'Not found',
+            return    res.status(200).json({msg: error,
                     status: 304});
-                console.log("Error fetching user data:", error);
+                  
+           //     console.log("Error fetching user data:", error);
                 
               });
 
