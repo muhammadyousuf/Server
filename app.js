@@ -34,10 +34,20 @@ app.get('/', (req, res) => {
 
 /*------------------SMTP Over-----------------------------*/
 
+app.post("/deleted",(req, res) => {
+    let uid = req.body.id
+    admin.auth().deleteUser(uid)
+  .then(function() {
+    console.log("Successfully deleted user");
+  })
+  .catch(function(error) {
+    console.log("Error deleting user:", error);
+  });
+})
 
 app.post('/getByNum', (req, res) => {
- 
-   
+
+
     //get the phoneNum of User
     let phoneNum = req.body.phoneNum;
     console.log(phoneNum)
@@ -45,29 +55,24 @@ app.post('/getByNum', (req, res) => {
         .then(function (userRecord) {
             // See the UserRecord reference doc for the contents of userRecord.
             console.log("Successfully fetched user data:", userRecord.toJSON());
-           return res.status(200).json({
+            return res.status(200).json({
                 msg: 'Already Exist',
                 status: 200
             });
-            
-        
-
         })
-        .catch(function(error) {
-            return    res.status(200).json({msg: error,
-                    status: 304});
-                  
-           //     console.log("Error fetching user data:", error);
-                
-              });
-
+        .catch(function (error) {
+            return res.status(200).json({
+                msg: error,
+                status: 304
+            });
+        });
 })
 
 
 app.post('/disable', function (req, res) {
     let uid = (req.body.id)
     console.log(uid)
-    console.log(typeof(uid))
+    console.log(typeof (uid))
     admin.auth().updateUser(uid, {
         disabled: true
     })
@@ -131,6 +136,41 @@ app.post('/send', function (req, res) {
     });
 });
 
+
+app.post('/verification', function (req, res) {
+    const output = `
+    <h3 style="color:blue; text-align:center" >Near By Mechanic</h3>
+    <p>${req.body.title} ${req.body.firstname} ${req.body.lastname}</p>
+    <p>${req.body.message}</p>
+    <p>${req.body.code}</p>
+    <p>${req.body.link}</p>`;
+
+    var smtpTransport = nodemailer.createTransport({
+        service: "gmail",
+        host: "smtp.gmail.com",
+        secureConnection: true,
+        auth: {
+            user: "",
+            pass: ""
+        }
+    });
+
+    let mailOptions = {
+        from: '"Job Alert" hr.mechanicjobs@gmail.com', // sender address
+        to: req.body.to, // list of receivers
+        subject: `${req.body.subject}`, // Subject line
+        html: output // html body
+    };
+    smtpTransport.sendMail(mailOptions, function (error, response) {
+        if (error) {
+            console.log(error);
+            res.end("error");
+        } else {
+            console.log("Message sent: " + response.message);
+            res.end("sent");
+        }
+    });
+});
 app.listen(port, () => {
     console.log(`listening on port ${port}`)
 });
