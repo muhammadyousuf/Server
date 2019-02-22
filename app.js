@@ -39,9 +39,11 @@ app.post("/deleted",(req, res) => {
     admin.auth().deleteUser(uid)
   .then(function() {
     console.log("Successfully deleted user");
+    res.end("Chal bhai ho gya ");
   })
   .catch(function(error) {
     console.log("Error deleting user:", error);
+    res.end("Sorry");
   });
 })
 
@@ -141,7 +143,6 @@ app.post('/verification', function (req, res) {
     const output = `
     <h3 style="color:blue; text-align:center" >Near By Mechanic</h3>
     <p>${req.body.title} ${req.body.firstname} ${req.body.lastname}</p>
-    <p>${req.body.message}</p>
     <p>${req.body.code}</p>
     <p>${req.body.link}</p>`;
 
