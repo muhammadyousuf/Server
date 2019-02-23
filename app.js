@@ -108,9 +108,9 @@ app.post('/enable', function (req, res) {
 
 app.post('/send', function (req, res) {
     const output = `
-    <h3 style="color:blue; text-align:center" >Near By Mechanic</h3>
-    <p>${req.body.title} ${req.body.firstname} ${req.body.lastname}</p>
-    <p>${req.body.message}</p>`;
+    <h3 style="color:green; text-align:left; font-family:Times; font-size:24;" >Near By Mechanic</h3>
+    <p style="color:black; text-align:left; font-family:Times; font-size:12;text-transform: capitalize;" >${req.body.title} ${req.body.firstname} ${req.body.lastname}</p>
+    <p style="color:black; text-align:left; font-family:Times; font-size:12;" >${req.body.message}</p>`;
     var smtpTransport = nodemailer.createTransport({
         service: "gmail",
         host: "smtp.gmail.com",
@@ -141,10 +141,10 @@ app.post('/send', function (req, res) {
 
 app.post('/verification', function (req, res) {
     const output = `
-    <h3 style="color:blue; text-align:center" >Near By Mechanic</h3>
-    <p>${req.body.title} ${req.body.firstname} ${req.body.lastname}</p>
-    <p>${req.body.code}</p>
-    <p>${req.body.link}</p>`;
+    <h3 style="color:green; text-align:left; font-family:Times; font-size:24;" >Near By Mechanic</h3>
+    <p style="color:black; text-align:left; font-family:Times; font-size:12; text-transform: capitalize; " >${req.body.title} ${req.body.firstname} ${req.body.lastname}</p>
+    <p style="color:black; text-align:left; font-family:Times; font-size:12;" >${req.body.code}</p>
+    <p style="color:black; text-align:left; font-family:Times; font-size:12;" >${req.body.link}</p>`;
 
     var smtpTransport = nodemailer.createTransport({
         service: "gmail",
