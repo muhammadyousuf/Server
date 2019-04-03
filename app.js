@@ -34,17 +34,17 @@ app.get('/', (req, res) => {
 
 /*------------------SMTP Over-----------------------------*/
 
-app.post("/deleted",(req, res) => {
+app.post("/deleted", (req, res) => {
     let uid = req.body.id
     admin.auth().deleteUser(uid)
-  .then(function() {
-    console.log("Successfully deleted user");
-    res.end("Chal bhai ho gya ");
-  })
-  .catch(function(error) {
-    console.log("Error deleting user:", error);
-    res.end("Sorry");
-  });
+        .then(function () {
+            console.log("Successfully deleted user");
+            res.end("Chal bhai ho gya ");
+        })
+        .catch(function (error) {
+            console.log("Error deleting user:", error);
+            res.end("Sorry");
+        });
 })
 
 app.post('/getByNum', (req, res) => {
@@ -81,7 +81,6 @@ app.post('/disable', function (req, res) {
         .then(function (userRecord) {
             // See the UserRecord reference doc for the contents of userRecord.
             console.log("Successfully updated user", userRecord.toJSON());
-
             res.end("Chal bhai ho gya ");
         })
         .catch(function (error) {
@@ -122,7 +121,7 @@ app.post('/send', function (req, res) {
     });
 
     let mailOptions = {
-        from: '"Job Alert" hr.mechanicjobs@gmail.com', // sender address
+        from: '"Job Alert" ', // sender address
         to: req.body.to, // list of receivers
         subject: `${req.body.subject}`, // Subject line
         html: output // html body
@@ -158,7 +157,7 @@ app.post('/verification', function (req, res) {
     });
 
     let mailOptions = {
-        from: '"Job Alert" hr.mechanicjobs@gmail.com', // sender address
+        from: '"Job Alert" ', // sender address
         to: req.body.to, // list of receivers
         subject: `${req.body.subject}`, // Subject line
         html: output // html body
@@ -173,6 +172,74 @@ app.post('/verification', function (req, res) {
         }
     });
 });
+
+app.post('/bills', function (req, res) {
+    console.log(req)
+    const output = `
+    <h3 style="color:green; text-align:left; font-family:Times; font-size:24;" >Near By Mechanic</h3>
+    <p style="color:black; text-align:left; font-family:Times; font-size:12; text-transform: capitalize; font-size:20px; font-weight:bold; " >${req.body.firstname} ${req.body.lastname}</p>
+    <table  style="border:1px solid black;" >
+    <tbody>
+    <tr>
+    <th style="color:black; text-align:center; font-family:Times; font-size:22px; border:1px solid black; padding:15px " >Account Number</th>
+    <th style="color:black; text-align:center; font-family:Times; font-size:22px; border:1px solid black; padding:15px " >Total Jobs</th>
+    <th style="color:black; text-align:center; font-family:Times; font-size:22px; border:1px solid black; padding:15px " >Start Bill Month</th>
+    <th style="color:black; text-align:center; font-family:Times; font-size:22px; border:1px solid black; padding:15px " >End Bill Month</th>
+    </tr>
+    <tr style="color:gray; text-align:center; font-family:Times; font-size:18px; border:1px solid black; padding:5px; " >
+    <td style="color:gray; text-align:center; font-family:Times; font-size:18px; border:1px solid black; padding:5px; " >${req.body.id}</td>
+    <td style="color:gray; text-align:center; font-family:Times; font-size:18px; border:1px solid black; padding:5px; " >${req.body.JobsCount}</td>
+    <td style="color:gray; text-align:center; font-family:Times; font-size:18px; border:1px solid black; padding:5px; " >${req.body.startDate}</td>
+    <td style="color:gray; text-align:center; font-family:Times; font-size:18px; border:1px solid black; padding:5px; " >${req.body.endDate}</td>
+    </tr>
+    </tbody>
+    </table>
+    <br /><br /> 
+    <table style="border:1px solid black;"  >
+    <tbody>
+    <tr>
+    <th style="color:black; text-align:center; font-family:Times; font-size:22px; border:1px solid black; padding:14px " >Issue Date</th>
+    <th style="color:black; text-align:center; font-family:Times; font-size:22px; border:1px solid black; padding:14px ">Due Date</th>
+    <th style="color:black; text-align:center; font-family:Times; font-size:22px; border:1px solid black; padding:5px ">Amount Within Due Date</th>
+    <th style="color:black; text-align:center; font-family:Times; font-size:22px; border:1px solid black; padding:5px ">Amount After Due Date</th>
+    </tr>
+    <tr>
+    <td style="color:gray; text-align:center; font-family:Times; font-size:18px; border:1px solid black; padding:5px;">${req.body.date}</td>
+    <td style="color:gray; text-align:center; font-family:Times; font-size:18px; border:1px solid black; padding:5px;">${req.body.lastDate}</td>
+    <td style="color:gray; text-align:center; font-family:Times; font-size:18px; border:1px solid black; padding:5px;">${req.body.bill}</td>
+    <td style="color:gray; text-align:center; font-family:Times; font-size:18px; border:1px solid black; padding:5px;">${req.body.billDue}</td>
+    </tr>
+    </tbody>
+    </table>`
+        ;
+
+    var smtpTransport = nodemailer.createTransport({
+        service: "gmail",
+        host: "smtp.gmail.com",
+        secureConnection: true,
+        auth: {
+            user: "",
+            pass: ""
+        }
+    });
+
+    let mailOptions = {
+        from: '"Job Alert" ', // sender address
+        to: req.body.to, // list of receivers
+        subject: 'NearBYMechanic BILL', // Subject line
+        html: output // html body
+    };
+    smtpTransport.sendMail(mailOptions, function (error, response) {
+        if (error) {
+            console.log(error);
+            res.end("error");
+        } else {
+            console.log("Message sent: " + response.message);
+            res.end("sent");
+        }
+    });
+});
+
 app.listen(port, () => {
     console.log(`listening on port ${port}`)
 });
