@@ -8,7 +8,7 @@ const app = express();
 const port = 3500;
 
 var serviceAccount = require('./serviceAccountKey.json');
-
+app.set('port', (process.env.PORT || 3500));
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://mechanic-6d028.firebaseio.com'
