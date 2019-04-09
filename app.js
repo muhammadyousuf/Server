@@ -5,7 +5,7 @@ var nodemailer = require("nodemailer");
 const cors = require('cors');
 var admin = require('firebase-admin');
 const app = express();
-const port = 3500;
+//const port = 3500;
 
 var serviceAccount = require('./serviceAccountKey.json');
 app.set('port', (process.env.PORT || 3500));
@@ -240,6 +240,6 @@ app.post('/bills', function (req, res) {
     });
 });
 
-app.listen(port, () => {
-    console.log(`listening on port ${port}`)
-});
+// app.listen(port, () => {
+//     console.log(`listening on port ${port}`)
+// });
