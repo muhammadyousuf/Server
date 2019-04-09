@@ -181,7 +181,7 @@ app.post('/bills', function (req, res) {
     console.log(req)
     const output = `
     <h3 style="color:green; text-align:left; font-family:Times; font-size:24;" >Near By Mechanic</h3>
-    <p style="color:black; text-align:left; font-family:Times; font-size:12; text-transform: capitalize; font-size:20px; font-weight:bold; " >${req.body.firstname} ${req.body.lastname}</p>
+    <p style="color:black; text-align:left; font-family:Times; font-size:12; text-transform: capitalize; font-size:20px; font-weight:bold; " >${req.body.firstName} ${req.body.lastName}</p>
     <table  style="border:1px solid black;" >
     <tbody>
     <tr>
@@ -229,7 +229,7 @@ app.post('/bills', function (req, res) {
 
     let mailOptions = {
         from: 'hr.mechanicjobs@gmail.com "Job Alert" ', // sender address
-        to: req.body.to, // list of receivers
+        to: req.body.email, // list of receivers
         subject: 'NearBYMechanic BILL', // Subject line
         html: output // html body
     };
