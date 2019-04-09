@@ -243,3 +243,6 @@ app.post('/bills', function (req, res) {
 // app.listen(port, () => {
 //     console.log(`listening on port ${port}`)
 // });
+app.listen(app.get('port'), function () {
+    console.log("Server is on port ", app.get('port'));
+ });
