@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+  
   },
   "author": "muhammad yousuf",
   "license": "ISC",
@@ -16,5 +16,8 @@
     "morgan": "^1.9.1",
     "nodemailer": "^5.1.0",
     "nodemon": "^1.18.10"
+  },
+  "engines": {
+    "node": "10.15.3"
   }
 }
