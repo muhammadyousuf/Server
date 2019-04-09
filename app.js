@@ -108,7 +108,7 @@ app.post('/enable', function (req, res) {
 app.post('/send', function (req, res) {
 
     console.log('req', req);
-    res.end(req);
+
 
     const output = `
     <h3 style="color:green; text-align:left; font-family:Times; font-size:24;" >Near By Mechanic</h3>
