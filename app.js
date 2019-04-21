@@ -11,7 +11,7 @@ var serviceAccount = require('./serviceAccountKey.json');
 app.set('port', (process.env.PORT || 3500));
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://mechanic-6d028.firebaseio.com'
+    databaseURL: 'https://nearbymechanic-2ac47.firebaseio.com'
 });
 
 app.use(logger('dev'));
