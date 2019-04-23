@@ -120,7 +120,7 @@ app.post('/send', function (req, res) {
         secureConnection: true,
         auth: {
             user: "hr.mechanicjobs@gmail.com",
-            pass: "hr123456"
+            pass: "hr.mechanicjobs123"
         }
     });
 
@@ -156,7 +156,7 @@ app.post('/verification', function (req, res) {
         secureConnection: true,
         auth: {
             user: "hr.mechanicjobs@gmail.com",
-            pass: "hr123456"
+            pass: "hr.mechanicjobs123"
         }
     });
 
@@ -223,7 +223,7 @@ app.post('/bills', function (req, res) {
         secureConnection: true,
         auth: {
             user: "hr.mechanicjobs@gmail.com",
-            pass: "hr123456"
+            pass: "hr.mechanicjobs123"
         }
     });
 
