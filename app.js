@@ -119,13 +119,13 @@ app.post('/send', function (req, res) {
         host: "smtp.gmail.com",
         secureConnection: true,
         auth: {
-            user: "hr.mechanicjobs@gmail.com",
-            pass: "hr.mechanicjobs123"
+            user: "",
+            pass: ""
         }
     });
 
     let mailOptions = {
-        from: 'hr.mechanicjobs@gmail.com "Job Alert" ', // sender address
+        from: ' "Job Alert" ', // sender address
         to: req.body.to, // list of receivers
         subject: `${req.body.subject}`, // Subject line
         html: output // html body
@@ -155,13 +155,13 @@ app.post('/verification', function (req, res) {
         host: "smtp.gmail.com",
         secureConnection: true,
         auth: {
-            user: "hr.mechanicjobs@gmail.com",
-            pass: "hr.mechanicjobs123"
+            user: "",
+            pass: ""
         }
     });
 
     let mailOptions = {
-        from: 'hr.mechanicjobs@gmail.com "Job Alert" ', // sender address
+        from: ' "Job Alert" ', // sender address
         to: req.body.to, // list of receivers
         subject: `${req.body.subject}`, // Subject line
         html: output // html body
@@ -222,13 +222,13 @@ app.post('/bills', function (req, res) {
         host: "smtp.gmail.com",
         secureConnection: true,
         auth: {
-            user: "hr.mechanicjobs@gmail.com",
-            pass: "hr.mechanicjobs123"
+            user: "",
+            pass: ""
         }
     });
 
     let mailOptions = {
-        from: 'hr.mechanicjobs@gmail.com "Job Alert" ', // sender address
+        from: ' "Job Alert" ', // sender address
         to: req.body.email, // list of receivers
         subject: 'NearBYMechanic BILL', // Subject line
         html: output // html body
